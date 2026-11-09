@@ -84,6 +84,14 @@ tasks.register('checkContract', JavaExec) {
     jvmArgs '-XX:+UnlockDiagnosticVMOptions', '-XX:-BytecodeVerificationRemote', '-XX:-BytecodeVerificationLocal'
 }
 
+/** The shared ledger, on the game's real stat classes. */
+tasks.register('checkLedger', JavaExec) {
+    dependsOn tasks.named('contractClasses')
+    classpath = sourceSets.contract.runtimeClasspath
+    mainClass = 'oddiszcommons.ledger.LedgerCheck'
+    executable = "${starsectorPath}/jre/bin/java.exe"
+}
+
 /** mod_info.json, the .version file and the Version Checker registration must agree. */
 tasks.register('checkVersionMetadata') {
     doLast {
@@ -148,7 +156,7 @@ tasks.register('checkReleaseFiles') {
 }
 
 tasks.named('check') {
-    dependsOn tasks.named('checkNoForbiddenApis'), tasks.named('checkContract'),
+    dependsOn tasks.named('checkNoForbiddenApis'), tasks.named('checkContract'), tasks.named('checkLedger'),
             tasks.named('checkVersionMetadata'), tasks.named('checkReleaseFiles')
 }
 

@@ -1,3 +1,6 @@
+Version 0.2.0 (2026-11-09)
+- Added a shared colony ledger that Omega Core Everywhere, Astral Ascension Renewed and Toolbox Economy Curves now use to keep, undo and clean up their colony changes before every save.
+
 Version 0.1.0 (2026-11-09)
 - First version: a Manage button on the campaign bottom bar (shortcut Y) where Oddisz's mods keep their own pages, one tab per mod.
 - Shares one button with Project Arondight, Captain's Quarters and Liminal when those are installed.

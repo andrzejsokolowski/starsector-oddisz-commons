@@ -25,6 +25,20 @@ Other mods depend on it, so keep the public API (`oddiszcommons.manage.Manage`, 
 `checkContract` runs `contract/src/.../ContractCheck` on the game's own Java with bytecode checks off
 (the game's scrambled class names need that). It plays the other mods' side of the agreement.
 
+## The colony ledger
+
+- `oddiszcommons.ledger.Ledger` (ODC-2, 0.2.0) replaced the copies in Omega Core Everywhere,
+  Astral Ascension Renewed and Toolbox Economy Curves. Those three mods require OddiszCommons and
+  compile against `../OddiszCommons/jars/OddiszCommons.jar`, so build this project first.
+- Changes are keyed by target object (identity) and by kind plus id (`mult:`, `flat:`, `hold:`), so a
+  mult and a flat under one id on one stat are separate.
+- A modifier is rewritten only when its value or text differs: Theory of Toolbox reads stats from
+  worker threads, and an equal rewrite gains nothing.
+- `releaseForSave` never applies colonies again (that crashes inside a save). `sweep` and `releaseAll`
+  apply changed colonies again unless the ledger was made with `reapplyColonies` false.
+- `checkLedger` runs `contract/src/oddiszcommons/ledger/LedgerCheck` on the game's real stat classes.
+  Changing the ledger's behaviour changes three released mods: check each of them.
+
 ## The Manage button
 
 - `ManageBar` is the script and the agreement's entry point. Sector memory `$mgmt_bar` holds
