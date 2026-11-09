@@ -1,0 +1,66 @@
+Subject: [0.98a] OddiszCommons 0.2.1 - shared parts for Oddisz's mods
+
+[center][size=28pt][url=https://github.com/andrzejsokolowski/starsector-oddisz-commons/releases/latest][b]OddiszCommons[/b][/url][/size]
+[url=https://github.com/andrzejsokolowski/starsector-oddisz-commons/releases/latest][img]https://img.shields.io/github/downloads/andrzejsokolowski/starsector-oddisz-commons/total?style=for-the-badge&label=download[/img][/url]  [url=https://github.com/andrzejsokolowski/starsector-oddisz-commons][img]https://img.shields.io/github/v/release/andrzejsokolowski/starsector-oddisz-commons?display_name=tag&sort=semver&style=for-the-badge&label=source[/img][/url]
+[/center]
+[center][b]
+WHAT DOES THIS MOD DO?
+Parts that several of my mods share, kept in one place.
+Install it when one of my mods asks for it. On its own it adds nothing you will notice.
+
+[color=red]Requires nothing.[/color]
+[/b][/center]
+[center]
+[hr][center][size=12pt][b]Needed By[/b][/size][/center][hr]
+[list]
+[li][url=https://fractalsoftworks.com/forum/index.php?topic=36168]Omega Core Everywhere[/url] 1.2.3 and newer[/li]
+[li][url=https://fractalsoftworks.com/forum/index.php?topic=36167]Astral Ascension Renewed[/url] 1.0.2 and newer[/li]
+[li][url=https://fractalsoftworks.com/forum/index.php?topic=36178]Toolbox Economy Curves[/url] 1.0.3 and newer[/li]
+[/list]
+
+[hr][center][size=12pt][b]Colony Ledger[/b][/size][/center][hr]
+[list]
+[li]Keeps every change those mods make to your colonies: production, income, demand, size limits.[/li]
+[li]A change ends the moment its reason does: the core is removed, the colony shrinks, a setting is switched off.[/li]
+[li]The changes come off before a save and go back on after it, so the save holds no trace of them.[/li]
+[/list]
+
+[hr][center][size=12pt][b]Manage Button[/b][/size][/center][hr]
+[list]
+[li]A [b]Manage (Y)[/b] button on the campaign bottom bar, after Command, also while docked. It opens a full screen with one tab per mod.[/li]
+[li]The button only appears when an installed mod has a page there. The tabs also open with the number keys 1 to 9.[/li]
+[li]Project Arondight, Captain's Quarters and Liminal have a Manage button of their own. With any of them installed there is still one button, with all the tabs side by side.[/li]
+[/list]
+
+[hr][center][size=12pt][b]For Modders[/b][/size][/center][hr]
+[list]
+[li]Add a page: [b]Manage.addPage(modId, tabName, page)[/b] in onApplicationLoad, with a class that builds its own panel each time the tab opens.[/li]
+[li]Keep colony changes: [b]oddiszcommons.ledger.Ledger[/b]. Put every wanted change through it each frame and call sweep(); call releaseForSave() before a save.[/li]
+[li]Details and examples are in the [url=https://github.com/andrzejsokolowski/starsector-oddisz-commons]README[/url].[/li]
+[/list]
+
+[hr][center][size=12pt][b]Compatibility[/b][/size][/center][hr]
+[list]
+[li]Safe to add to a game in progress.[/li]
+[li]Remove the mods that need it before removing it.[/li]
+[/list]
+[/center]
+
+[spoiler=AI use disclaimer]Some or all assets and code in this mod were created using AI tools:
+[list]
+[li]Code: Claude Code (Claude Opus 5.5)[/li]
+[li]Text (readme and this post): Claude Code (Claude Opus 5.5)[/li][/list]
+[/spoiler]
+
+[spoiler=License]
+This mod is under the CC0 (Creative Commons Zero) License, allowing you to do whatever you want with the code, without giving any credit to anyone.
+[/spoiler]
+
+[spoiler=Version log]
+[b]0.2.1[/b]
+[list][li]Added the forum topic link for Version Checker.[/li][/list]
+[b]0.2.0[/b]
+[list][li]Added a shared colony ledger that Omega Core Everywhere, Astral Ascension Renewed and Toolbox Economy Curves now use to keep, undo and clean up their colony changes before every save.[/li][/list]
+[b]0.1.0[/b]
+[list][li]First version: a Manage button on the campaign bottom bar (shortcut Y) where Oddisz's mods keep their own pages, one tab per mod. Shares one button with Project Arondight, Captain's Quarters and Liminal when those are installed.[/li][/list]
+[/spoiler]

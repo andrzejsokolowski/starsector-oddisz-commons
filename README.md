@@ -1,6 +1,10 @@
 # OddiszCommons
 
 A Starsector 0.98a library mod by Oddisz: parts that Oddisz's mods share.
+Forum topic: https://fractalsoftworks.com/forum/index.php?topic=36282
+
+Needed by Omega Core Everywhere 1.2.3, Astral Ascension Renewed 1.0.2 and Toolbox Economy Curves 1.0.3
+(and newer).
 
 ## The Manage button
 

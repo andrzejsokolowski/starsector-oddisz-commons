@@ -1,3 +1,6 @@
+Version 0.2.1 (2026-11-10)
+- Added the forum topic link for Version Checker.
+
 Version 0.2.0 (2026-11-09)
 - Added a shared colony ledger that Omega Core Everywhere, Astral Ascension Renewed and Toolbox Economy Curves now use to keep, undo and clean up their colony changes before every save.
 
