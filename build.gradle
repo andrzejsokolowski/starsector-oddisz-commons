@@ -1,0 +1,194 @@
+plugins {
+    id 'java'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+sourceSets {
+    main {
+        java.srcDirs = ['src']
+    }
+    // A tiny separate mod that adds one page, for testing the Manage button in game. Never released.
+    testpage {
+        java.srcDirs = ['testpage/src']
+    }
+    // Headless checks of the shared Manage button agreement. Never shipped.
+    contract {
+        java.srcDirs = ['contract/src']
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+// Starsector core (obfuscated game classes + bundled libs: lwjgl, json, log4j, ...)
+def gameJars = fileTree(dir: "${starsectorPath}/starsector-core", include: '*.jar')
+
+dependencies {
+    compileOnly gameJars
+    testpageCompileOnly gameJars
+    testpageCompileOnly files(sourceSets.main.output)
+    contractImplementation gameJars
+    contractImplementation files(sourceSets.main.output)
+}
+
+jar {
+    destinationDirectory = file('jars')
+    archiveFileName = 'OddiszCommons.jar'
+}
+
+// Starsector's classloader refuses java.io, java.nio.file and java.lang.reflect to mod code, and the
+// refusal happens at class-resolution time - so a stray import surfaces as a crash somewhere else
+// entirely. Catch it at build time instead by scanning every compiled class's constant pool.
+tasks.register('checkNoForbiddenApis') {
+    dependsOn tasks.named('classes'), tasks.named('testpageClasses')
+    outputs.upToDateWhen { false }
+    doLast {
+        def forbidden = ['java/io/', 'java/nio/file/', 'java/lang/reflect/']
+        def offenders = []
+        [sourceSets.main, sourceSets.testpage].each { set ->
+            set.output.classesDirs.each { dir ->
+                fileTree(dir: dir, include: '**/*.class').each { f ->
+                    def text = new String(f.bytes, 'ISO-8859-1')
+                    forbidden.each { needle ->
+                        if (text.contains(needle)) offenders << "${f.name} references ${needle}"
+                    }
+                }
+            }
+        }
+        if (!offenders.isEmpty()) {
+            throw new GradleException("Forbidden API used (Starsector will refuse to load it):\n  " +
+                    offenders.join('\n  '))
+        }
+    }
+}
+
+tasks.named('jar') { dependsOn tasks.named('checkNoForbiddenApis') }
+
+/** Plays the part of the other mods in the Manage button agreement, without the game running. */
+tasks.register('checkContract', JavaExec) {
+    dependsOn tasks.named('contractClasses')
+    classpath = sourceSets.contract.runtimeClasspath
+    mainClass = 'oddiszcommons.manage.ContractCheck'
+    // The game's own Java, started the way the game starts it: its scrambled class and field names
+    // only load with the bytecode checks off.
+    executable = "${starsectorPath}/jre/bin/java.exe"
+    jvmArgs '-XX:+UnlockDiagnosticVMOptions', '-XX:-BytecodeVerificationRemote', '-XX:-BytecodeVerificationLocal'
+}
+
+/** mod_info.json, the .version file and the Version Checker registration must agree. */
+tasks.register('checkVersionMetadata') {
+    doLast {
+        def infoFile = file('mod_info.json')
+        def versionFile = file('oddisz_commons.version')
+        def registrationFile = file('data/config/version/version_files.csv')
+        [infoFile, versionFile, registrationFile].each { metadata ->
+            if (!metadata.isFile()) throw new GradleException("Missing update metadata: ${metadata.name}")
+        }
+        def parser = new groovy.json.JsonSlurper()
+        def info = parser.parse(infoFile, 'UTF-8')
+        def remote = parser.parse(versionFile, 'UTF-8')
+        def parts = ['major', 'minor', 'patch'].collect { remote.modVersion?.get(it)?.toString() }
+        if (parts.any { it == null || !(it ==~ /\d+/) } || info.version != parts.join('.'))
+            throw new GradleException('mod_info.json and oddisz_commons.version must have the same numeric version')
+        def masterUrl = 'https://raw.githubusercontent.com/andrzejsokolowski/starsector-oddisz-commons/main/oddisz_commons.version'
+        def downloadUrl = 'https://github.com/andrzejsokolowski/starsector-oddisz-commons/releases/latest/download/OddiszCommons.zip'
+        def changelogUrl = 'https://raw.githubusercontent.com/andrzejsokolowski/starsector-oddisz-commons/main/changelog.txt'
+        if (info.id != 'oddisz_commons' || info.name != remote.modName)
+            throw new GradleException('Update metadata must identify OddiszCommons')
+        if (info.updateCheckURL != masterUrl || remote.masterVersionFile != masterUrl)
+            throw new GradleException('Both update URLs must point to the published oddisz_commons.version file')
+        if (remote.directDownloadURL != downloadUrl)
+            throw new GradleException('The update download must point to the OddiszCommons.zip release asset')
+        if (remote.changelogURL != changelogUrl)
+            throw new GradleException('changelogURL must point to changelog.txt on main')
+        if (info.modThreadId?.toString() != remote.modThreadId?.toString())
+            throw new GradleException('mod_info.json and the .version file must name the same forum topic')
+        if (info.gameVersion != remote.starsectorVersion)
+            throw new GradleException('The supported Starsector versions do not match')
+        if (registrationFile.readLines('UTF-8').findAll { !it.trim().isEmpty() } != ['version file', 'oddisz_commons.version'])
+            throw new GradleException('Version Checker must register oddisz_commons.version')
+        if (!file('changelog.txt').getText('UTF-8').startsWith("Version ${info.version} ("))
+            throw new GradleException("changelog.txt must start with Version ${info.version}")
+        logger.lifecycle("Update metadata verified for OddiszCommons ${info.version}")
+    }
+}
+
+/** The files that ship: no UTF-8 BOM (it breaks every Starsector JSON and CSV), every art path exists. */
+tasks.register('checkReleaseFiles') {
+    doLast {
+        def problems = []
+        fileTree(projectDir) {
+            include 'mod_info.json', '*.version', 'data/**/*.json', 'data/**/*.csv', 'testpage/mod_info.json'
+        }.each { f ->
+            def bytes = f.bytes
+            if (bytes.length >= 3 && (bytes[0] & 0xFF) == 0xEF && (bytes[1] & 0xFF) == 0xBB && (bytes[2] & 0xFF) == 0xBF)
+                problems << "UTF-8 BOM in ${projectDir.toPath().relativize(f.toPath())}"
+        }
+        def core = file("${starsectorPath}/starsector-core")
+        def artRef = ~/graphics\/[A-Za-z0-9_\-\/. ]+?\.(png|jpg|webp)/
+        fileTree(projectDir) { include 'data/**', 'src/**/*.java', 'testpage/src/**/*.java' }.each { f ->
+            (f.getText('UTF-8') =~ artRef).each { match ->
+                def path = match[0]
+                if (!file(path).isFile() && !new File(core, path).isFile())
+                    problems << "${projectDir.toPath().relativize(f.toPath())} names missing art ${path}"
+            }
+        }
+        if (problems) throw new GradleException("Release files are not ready:\n  " + problems.join('\n  '))
+        logger.lifecycle('Release files verified')
+    }
+}
+
+tasks.named('check') {
+    dependsOn tasks.named('checkNoForbiddenApis'), tasks.named('checkContract'),
+            tasks.named('checkVersionMetadata'), tasks.named('checkReleaseFiles')
+}
+
+// Only what the game loads.
+def releaseFiles = copySpec {
+    from(projectDir) {
+        include 'mod_info.json', 'oddisz_commons.version'
+        include 'data/**', 'jars/OddiszCommons.jar'
+    }
+}
+
+// Sync, not Copy: files that no longer ship must not linger in the staging folder.
+tasks.register('stageRelease', Sync) {
+    dependsOn tasks.named('jar')
+    with releaseFiles
+    into layout.projectDirectory.dir('OddiszCommons')
+}
+
+// Package directly from the source files so stale staging contents cannot enter a release.
+tasks.register('releaseZip', Zip) {
+    dependsOn tasks.named('stageRelease'), tasks.named('check')
+    destinationDirectory = layout.projectDirectory
+    archiveFileName = 'OddiszCommons.zip'
+    into('OddiszCommons') { with releaseFiles }
+}
+
+// ---- The test page mod: install next to OddiszCommons to see one page on the Manage screen ----
+
+tasks.register('testPageJar', Jar) {
+    dependsOn tasks.named('checkNoForbiddenApis')
+    from sourceSets.testpage.output
+    destinationDirectory = file('testpage/jars')
+    archiveFileName = 'OddiszCommonsTestPage.jar'
+}
+
+tasks.register('testPageZip', Zip) {
+    dependsOn tasks.named('testPageJar')
+    destinationDirectory = layout.projectDirectory
+    archiveFileName = 'OddiszCommonsTestPage.zip'
+    into('OddiszCommonsTestPage') {
+        from('testpage') { include 'mod_info.json', 'jars/OddiszCommonsTestPage.jar' }
+    }
+}

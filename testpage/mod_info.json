@@ -1,0 +1,17 @@
+{
+  "id": "oddisz_commons_testpage",
+  "name": "OddiszCommons Test Page",
+  "author": "Oddisz",
+  "version": "0.1.0",
+  "utility": "true",
+  "description": "Test only. Adds one page to the OddiszCommons Manage button.",
+  "gameVersion": "0.98a-RC8",
+  "jars": ["jars/OddiszCommonsTestPage.jar"],
+  "modPlugin": "oddiszcommonstest.TestPagePlugin",
+  "dependencies": [
+    {
+      "id": "oddisz_commons",
+      "name": "OddiszCommons"
+    }
+  ]
+}
