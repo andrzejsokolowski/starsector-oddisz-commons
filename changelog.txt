@@ -1,3 +1,6 @@
+Version 0.2.2 (2026-11-10)
+- New gold icon in mod managers (TriOS).
+
 Version 0.2.1 (2026-11-10)
 - Added the forum topic link for Version Checker.
 

@@ -2,7 +2,7 @@
   "id": "oddisz_commons",
   "name": "OddiszCommons",
   "author": "Oddisz",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "modThreadId": "36282",
   "utility": "true",
   "description": "Shared parts for Oddisz's mods. Keeps the colony changes of Omega Core Everywhere, Astral Ascension Renewed and Toolbox Economy Curves, which need it. Adds a Manage button to the campaign bottom bar where Oddisz's mods keep their own pages, shared with Project Arondight, Captain's Quarters and Liminal.",
