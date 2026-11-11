@@ -15,6 +15,7 @@ Install it when one of my mods asks for it. On its own it adds nothing you will 
 [li][url=https://fractalsoftworks.com/forum/index.php?topic=36168]Omega Core Everywhere[/url] 1.2.3 and newer[/li]
 [li][url=https://fractalsoftworks.com/forum/index.php?topic=36167]Astral Ascension Renewed[/url] 1.0.2 and newer[/li]
 [li][url=https://fractalsoftworks.com/forum/index.php?topic=36178]Toolbox Economy Curves[/url] 1.0.3 and newer[/li]
+[li][url=https://github.com/andrzejsokolowski/starsector-landlordsector/releases/latest]Landlordsector[/url][/li]
 [/list]
 
 [hr][center][size=12pt][b]Colony Ledger[/b][/size][/center][hr]
@@ -31,10 +32,17 @@ Install it when one of my mods asks for it. On its own it adds nothing you will 
 [li]Project Arondight, Captain's Quarters and Liminal have a Manage button of their own. With any of them installed there is still one button, with all the tabs side by side.[/li]
 [/list]
 
+[hr][center][size=12pt][b]Loading Screen Tips[/b][/size][/center][hr]
+[list]
+[li]Tips for Sol Renewed, Astral Ascension Renewed, Omega Core Everywhere, Landlordsector, Missions - Renewed, New Game Plus - Renewed, Achievements - Renewed, Extra System Reloaded - Oddisz Edition, Weapon Designer, The Everything Shop, Intel Renewed, StopBloatingMe and Cloning on the loading screen and the main menu.[/li]
+[li]A tip only shows when its mod is installed.[/li]
+[/list]
+
 [hr][center][size=12pt][b]For Modders[/b][/size][/center][hr]
 [list]
 [li]Add a page: [b]Manage.addPage(modId, tabName, page)[/b] in onApplicationLoad, with a class that builds its own panel each time the tab opens.[/li]
 [li]Keep colony changes: [b]oddiszcommons.ledger.Ledger[/b]. Put every wanted change through it each frame and call sweep(); call releaseForSave() before a save.[/li]
+[li]Add tips that only show with your mod installed: data/config/oddisz_commons/tips.json, with entries like {"mod":"your_mod_id", "tip":"..."}.[/li]
 [li]Details and examples are in the [url=https://github.com/andrzejsokolowski/starsector-oddisz-commons]README[/url].[/li]
 [/list]
 
@@ -56,6 +64,8 @@ This mod is under the CC0 (Creative Commons Zero) License, allowing you to do wh
 [/spoiler]
 
 [spoiler=Version log]
+[b]0.3.0[/b]
+[list][li]Loading screen and main menu tips for Sol Renewed, Astral Ascension Renewed, Omega Core Everywhere, Landlordsector, Missions - Renewed, New Game Plus - Renewed, Achievements - Renewed, Extra System Reloaded - Oddisz Edition, Weapon Designer, The Everything Shop, Intel Renewed, StopBloatingMe and Cloning. A tip only shows when its mod is installed.[/li][/list]
 [b]0.2.2[/b]
 [list][li]New gold icon in mod managers (TriOS).[/li][/list]
 [b]0.2.1[/b]

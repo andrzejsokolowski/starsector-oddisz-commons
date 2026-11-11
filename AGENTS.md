@@ -39,6 +39,17 @@ Other mods depend on it, so keep the public API (`oddiszcommons.manage.Manage`, 
 - `checkLedger` runs `contract/src/oddiszcommons/ledger/LedgerCheck` on the game's real stat classes.
   Changing the ledger's behaviour changes three released mods: check each of them.
 
+## Loading screen tips
+
+- `oddiszcommons.tips.Tips` (ODC-6, 0.3.0) reads `data/config/oddisz_commons/tips.json` (merged
+  across mods) in `onApplicationLoad` and adds each tip whose `mod` is enabled to the game's
+  `com.fs.starfarer.title.String.picker` (public static `WeightedRandomPicker<String>`, filled once by
+  `loadTips()` from `data/strings/tips.json`). Any failure is logged and the tips are skipped.
+- Andrzej picked the tips one by one: one or two per mod, mechanics only, each starting with a
+  `[Mod name] - ` tag. No ads, no "Oddisz's". Ask before adding new ones.
+- `checkTips` runs `contract/src/oddiszcommons/tips/TipsCheck`: real mod ids from the workspace,
+  the tag, plain ASCII, the filter, and that the picker field still exists.
+
 ## The Manage button
 
 - `ManageBar` is the script and the agreement's entry point. Sector memory `$mgmt_bar` holds

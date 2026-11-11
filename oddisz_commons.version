@@ -5,8 +5,8 @@
 	"modThreadId":36282,
 	"modVersion": {
 		"major":0,
-		"minor":2,
-		"patch":2
+		"minor":3,
+		"patch":0
 	},
 	"starsectorVersion":"0.98a-RC8",
 	"directDownloadURL":"https://github.com/andrzejsokolowski/starsector-oddisz-commons/releases/latest/download/OddiszCommons.zip"

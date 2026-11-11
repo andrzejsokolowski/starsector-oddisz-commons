@@ -1,0 +1,22 @@
+{
+	# Loading screen and main menu tips. A tip is added only when the mod named in "mod" is enabled.
+	# Other mods can add their own tips: put this file at the same path in your mod with your own
+	# entries. "freq" is optional (default 1, the same as every base game tip).
+	"tips":[
+		{"mod":"sol_renewed", "tip":"[Sol Renewed] - After the first Reckoning, three boss fleets each guard a planetkiller. Take all three and the attacks on Sol stop."},
+		{"mod":"astral_ascension_renewed", "tip":"[Astral Ascension Renewed] - Only a colony with an Omega core admin can grow past size 10."},
+		{"mod":"omega_core_everywhere", "tip":"[Omega Core Everywhere] - Omega ships can drop their Omega core when destroyed. Capitals always do."},
+		{"mod":"landlordsector", "tip":"[Landlordsector] - Look for Browse real estate at any market of size 3 or more. Homes on your own colonies cost half."},
+		{"mod":"missions_renewed", "tip":"[Missions - Renewed] - Missing a contract deadline charges the penalty even if you can't pay it. Check the deadline before you sign."},
+		{"mod":"ngp_renewed", "tip":"[New Game Plus - Renewed] - Career points are never used up. Every new game, you can spend all of them again at Legacy Station. Goods you buy there wait in its delivery bay."},
+		{"mod":"achievements_renewed", "tip":"[Achievements - Renewed] - If a hint isn't enough, turn on \"Show how to get achievements\" in the LunaLib settings."},
+		{"mod":"esr_oddisz", "tip":"[Extra System Reloaded] - Hull quality multiplies every Extra Systems upgrade on a ship. Raise it at a market with Heavy Industry or Orbital Works."},
+		{"mod":"esr_oddisz", "tip":"[Extra System Reloaded] - Upgrades bought on the same visit can be undone for a full refund."},
+		{"mod":"weapon_designer", "tip":"[Weapon Designer] - Editing a design changes every copy of that weapon you've already built."},
+		{"mod":"weapon_designer", "tip":"[Weapon Designer] - A design can borrow the on-hit or on-fire effect of any loaded weapon, modded ones too."},
+		{"mod":"the_everything_shop", "tip":"[The Everything Shop] - Treasury prices go down as your standing with the Independents goes up."},
+		{"mod":"intel_renewed", "tip":"[Intel Renewed] - Shift + right-click an intel entry to hide it. Ctrl + right-click hides every entry of that kind."},
+		{"mod":"stopbloatingme", "tip":"[StopBloatingMe] - A weapon blocked from markets still spawns on ships."},
+		{"mod":"oddisz_cloning", "tip":"[Cloning] - Cloning makes a colony grow much faster, but costs stability."},
+	],
+}

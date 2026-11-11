@@ -1,3 +1,6 @@
+Version 0.3.0 (2026-11-11)
+- Loading screen and main menu tips for Sol Renewed, Astral Ascension Renewed, Omega Core Everywhere, Landlordsector, Missions - Renewed, New Game Plus - Renewed, Achievements - Renewed, Extra System Reloaded - Oddisz Edition, Weapon Designer, The Everything Shop, Intel Renewed, StopBloatingMe and Cloning. A tip only shows when its mod is installed.
+
 Version 0.2.2 (2026-11-10)
 - New gold icon in mod managers (TriOS).
 

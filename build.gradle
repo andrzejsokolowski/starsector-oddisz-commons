@@ -92,6 +92,15 @@ tasks.register('checkLedger', JavaExec) {
     executable = "${starsectorPath}/jre/bin/java.exe"
 }
 
+/** The tips file and the tip filter, with the game's real picker class. */
+tasks.register('checkTips', JavaExec) {
+    dependsOn tasks.named('contractClasses')
+    classpath = sourceSets.contract.runtimeClasspath
+    mainClass = 'oddiszcommons.tips.TipsCheck'
+    executable = "${starsectorPath}/jre/bin/java.exe"
+    jvmArgs '-XX:+UnlockDiagnosticVMOptions', '-XX:-BytecodeVerificationRemote', '-XX:-BytecodeVerificationLocal'
+}
+
 /** mod_info.json, the .version file and the Version Checker registration must agree. */
 tasks.register('checkVersionMetadata') {
     doLast {
@@ -157,7 +166,7 @@ tasks.register('checkReleaseFiles') {
 
 tasks.named('check') {
     dependsOn tasks.named('checkNoForbiddenApis'), tasks.named('checkContract'), tasks.named('checkLedger'),
-            tasks.named('checkVersionMetadata'), tasks.named('checkReleaseFiles')
+            tasks.named('checkTips'), tasks.named('checkVersionMetadata'), tasks.named('checkReleaseFiles')
 }
 
 // Only what the game loads.

@@ -3,8 +3,8 @@
 A Starsector 0.98a library mod by Oddisz: parts that Oddisz's mods share.
 Forum topic: https://fractalsoftworks.com/forum/index.php?topic=36282
 
-Needed by Omega Core Everywhere 1.2.3, Astral Ascension Renewed 1.0.2 and Toolbox Economy Curves 1.0.3
-(and newer).
+Needed by Omega Core Everywhere 1.2.3, Astral Ascension Renewed 1.0.2, Toolbox Economy Curves 1.0.3
+(and newer) and Landlordsector.
 
 ## The Manage button
 
@@ -84,6 +84,26 @@ public void advance(float amount) {
 - Call `releaseForSave()` from `beforeGameSave` so a save holds nothing of the mod. The next pass puts
   everything back. It does not apply colonies again, because that crashes during a save.
 - An undo or a colony that throws is logged once in starsector.log and skipped.
+
+## Loading screen tips
+
+The game reads every mod's `data/strings/tips.json` before any mod code runs, so a tip there shows
+even when its mod is not installed. OddiszCommons keeps its tips in
+`data/config/oddisz_commons/tips.json` instead, each naming its mod, and adds a tip to the game's
+tip list only when that mod is enabled:
+
+```
+{
+	"tips":[
+		{"mod":"missions_renewed", "tip":"[Missions - Renewed] - Check the deadline before you sign."},
+		{"mod":"my_mod", "tip":"[My Mod] - A rarer tip.", "freq":0.5},
+	],
+}
+```
+
+Another mod can add its own tips by shipping a file at the same path. `freq` is optional (default 1,
+the same as every base game tip). The very first loading screen of a launch comes before mod code
+runs, so these tips show from the main menu on.
 
 ## Build
 
