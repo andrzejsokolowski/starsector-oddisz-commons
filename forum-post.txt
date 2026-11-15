@@ -64,6 +64,8 @@ This mod is under the CC0 (Creative Commons Zero) License, allowing you to do wh
 [/spoiler]
 
 [spoiler=Version log]
+[b]0.4.0[/b]
+[list][li]Updated for Starsector 0.98.5a.[/li][/list]
 [b]0.3.0[/b]
 [list][li]Loading screen and main menu tips for Sol Renewed, Astral Ascension Renewed, Omega Core Everywhere, Landlordsector, Missions - Renewed, New Game Plus - Renewed, Achievements - Renewed, Extra System Reloaded - Oddisz Edition, Weapon Designer, The Everything Shop, Intel Renewed, StopBloatingMe and Cloning. A tip only shows when its mod is installed.[/li][/list]
 [b]0.2.2[/b]

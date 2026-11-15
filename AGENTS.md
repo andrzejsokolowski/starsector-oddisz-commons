@@ -43,7 +43,7 @@ Other mods depend on it, so keep the public API (`oddiszcommons.manage.Manage`, 
 
 - `oddiszcommons.tips.Tips` (ODC-6, 0.3.0) reads `data/config/oddisz_commons/tips.json` (merged
   across mods) in `onApplicationLoad` and adds each tip whose `mod` is enabled to the game's
-  `com.fs.starfarer.title.String.picker` (public static `WeightedRandomPicker<String>`, filled once by
+  `com.fs.starfarer.title.D.picker` (`title.String` in 0.98a) (public static `WeightedRandomPicker<String>`, filled once by
   `loadTips()` from `data/strings/tips.json`). Any failure is logged and the tips are skipped.
 - Andrzej picked the tips one by one: one or two per mod, mechanics only, each starting with a
   `[Mod name] - ` tag. No ads, no "Oddisz's". Ask before adding new ones.
@@ -58,11 +58,13 @@ Other mods depend on it, so keep the public API (`oddiszcommons.manage.Manage`, 
   `registerTenant(modId, label, factoryClass, attentionKey, r, g, b)`.
 - A tab is only a class name with static `buildMgmtConsole(float, float)` and `releaseMgmtConsole()`, with no
   page id passed. So each page owns one of the 12 classes in `Slots` (`Slots$S0` to `Slots$S11`).
-- Game classes called directly (compiled against 0.98a-RC8): `CampaignState.getCore()`,
-  `getEncounterDialog().getCoreUI()` when docked, core screen `ui.newui.L` (`getButtons`,
+- Game classes called directly (compiled against 0.98.5a-RC4 since 0.4.0): `CampaignState.getCore()`,
+  `getEncounterDialog().getCoreUI()` when docked, core screen `ui.newui.S` (`getButtons`,
   `showPanelAsDialog`, `computePanelWidth`, `MAX_INTEL_WIDTH`, `getCurrentTab`, `dismiss`), the bar
-  `ui.newui.thissuper` (`addButton(label, id, null, listener)`, `getButton`, `BUTTON_WIDTH`, `BUTTON_PAD`),
-  the button `ui.n`, the listener `ui.U` and the tab panel `ui.interfacenew` with `ui.newui.Y.tabClosed`.
+  `ui.newui.X` (`addButton(label, id, null, listener)`, `getButton`, `BUTTON_WIDTH`, `BUTTON_PAD`),
+  the button `ui.classnew`, the listener `ui.U` and the tab panel `ui.z` with `ui.newui.b.tabClosed`.
+  In 0.98a these were `ui.newui.L`, `ui.newui.thissuper`, `ui.n`, `ui.interfacenew` and `ui.newui.Y`.
+  The 0.98.5a bar still has the same 7 game buttons and the same backing image.
   A game update can rename these: `checkContract` then fails. Any error at run time turns the button off
   for the session.
 - `BarPlate` extends the bar's backing image (`ui/tripad_button_holder`, 914 px, game buttons end at 903)

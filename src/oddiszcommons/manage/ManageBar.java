@@ -25,9 +25,9 @@ import com.fs.starfarer.api.ui.PositionAPI;
 import com.fs.starfarer.api.util.IntervalUtil;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.campaign.CampaignState;
-import com.fs.starfarer.ui.n;
-import com.fs.starfarer.ui.newui.L;
-import com.fs.starfarer.ui.newui.thissuper;
+import com.fs.starfarer.ui.classnew;
+import com.fs.starfarer.ui.newui.S;
+import com.fs.starfarer.ui.newui.X;
 
 /**
  * Puts the Manage button on the campaign bottom bar and shares it with other mods.
@@ -39,8 +39,8 @@ import com.fs.starfarer.ui.newui.thissuper;
  * is in charge, the public static methods below are the ones the other mods call. When another mod
  * is in charge, it hands that mod one tab per page.
  *
- * <p>The game classes used here ({@code CampaignState}, the core screen {@code L}, the bar
- * {@code thissuper}, the button {@code n}) are the game's own, compiled against 0.98a. Any error
+ * <p>The game classes used here ({@code CampaignState}, the core screen {@code S}, the bar
+ * {@code X}, the button {@code classnew}) are the game's own, compiled against 0.98.5a. Any error
  * turns the button off for the session instead of breaking the game.
  */
 public final class ManageBar implements EveryFrameScript {
@@ -80,7 +80,7 @@ public final class ManageBar implements EveryFrameScript {
     private final Set<String> handedOver = new HashSet<>();
     private boolean foreignFailed;
     private boolean newerContractLogged;
-    private n flashButton;
+    private classnew flashButton;
     private boolean flashOn;
     private boolean plateSkippedLogged;
 
@@ -291,16 +291,16 @@ public final class ManageBar implements EveryFrameScript {
     // ---- OddiszCommons is in charge -----------------------------------------------------------------
 
     private void host(MemoryAPI memory) {
-        L core = activeCore();
+        S core = activeCore();
         if (core == null) {
             return;
         }
-        thissuper bar = core.getButtons();
+        X bar = core.getButtons();
         if (bar == null) {
             return;
         }
         syncOwnTenants();
-        n button = bar.getButton(BUTTON_ID);
+        classnew button = bar.getButton(BUTTON_ID);
         if (button == null) {
             button = addButton(bar);
         }
@@ -338,7 +338,7 @@ public final class ManageBar implements EveryFrameScript {
     }
 
     /** The core screen whose bar is on screen: the campaign's own, or the one opened while docked. */
-    private static L activeCore() {
+    private static S activeCore() {
         CampaignUIAPI ui = Global.getSector().getCampaignUI();
         if (!(ui instanceof CampaignState)) {
             return null;
@@ -351,12 +351,12 @@ public final class ManageBar implements EveryFrameScript {
         return state.getCore();
     }
 
-    private n addButton(thissuper bar) {
+    private classnew addButton(X bar) {
         float ownEnd = gameButtonsEnd(bar);
         addPlate(bar, ownEnd);
         // The bar places a new button right of its last one and grows to fit it.
         bar.addButton(BUTTON_LABEL, BUTTON_ID, null, (input, source) -> onButtonClicked());
-        n button = bar.getButton(BUTTON_ID);
+        classnew button = bar.getButton(BUTTON_ID);
         if (button == null) {
             throw new IllegalStateException("the bottom bar did not keep the Manage button");
         }
@@ -365,17 +365,17 @@ public final class ManageBar implements EveryFrameScript {
     }
 
     /** Where the bar's buttons end, measured from the bar's left edge. */
-    private static float gameButtonsEnd(thissuper bar) {
+    private static float gameButtonsEnd(X bar) {
         PositionAPI barPos = bar.getPosition();
         float end = 0f;
-        for (n b : bar.getButtons().values()) {
+        for (classnew b : bar.getButtons().values()) {
             PositionAPI p = b.getPosition();
             end = Math.max(end, p.getX() + p.getWidth() - barPos.getX());
         }
         return end;
     }
 
-    private void addPlate(thissuper bar, float ownEnd) {
+    private void addPlate(X bar, float ownEnd) {
         SpriteAPI plate = Global.getSettings().getSprite("ui", "tripad_button_holder");
         float cell = bar.BUTTON_WIDTH + bar.BUTTON_PAD;
         float edge = plate == null ? -1f : plate.getWidth() - ownEnd;
@@ -394,8 +394,8 @@ public final class ManageBar implements EveryFrameScript {
 
     private void onButtonClicked() {
         try {
-            L core = activeCore();
-            n button = core == null || core.getButtons() == null ? null : core.getButtons().getButton(BUTTON_ID);
+            S core = activeCore();
+            classnew button = core == null || core.getButtons() == null ? null : core.getButtons().getButton(BUTTON_ID);
             if (button != null) {
                 button.setChecked(false);
             }
@@ -416,11 +416,11 @@ public final class ManageBar implements EveryFrameScript {
                 return false;
             }
             boolean docked = ui.getCurrentInteractionDialog() != null;
-            L core = activeCore();
+            S core = activeCore();
             if (core == null || core.getButtons() == null) {
                 return false;
             }
-            n button = core.getButtons().getButton(BUTTON_ID);
+            classnew button = core.getButtons().getButton(BUTTON_ID);
             if (button == null) {
                 return false;
             }
@@ -439,8 +439,8 @@ public final class ManageBar implements EveryFrameScript {
             if (tenants.isEmpty()) {
                 return false;
             }
-            float width = Math.min(core.computePanelWidth(true), L.MAX_INTEL_WIDTH);
-            float height = Math.min(core.computePanelHeight(true), L.MAX_INTEL_HEIGHT);
+            float width = Math.min(core.computePanelWidth(true), S.MAX_INTEL_WIDTH);
+            float height = Math.min(core.computePanelHeight(true), S.MAX_INTEL_HEIGHT);
             ManageShell shell = new ManageShell(tenants, width, height);
             core.showPanelAsDialog(button, shell, true, false);
             if (core.getCurrentTab() != shell) {
@@ -458,7 +458,7 @@ public final class ManageBar implements EveryFrameScript {
     }
 
     /** The button pulses while any tab has news, like the game's own "Character +". */
-    private void updateFlash(n button) {
+    private void updateFlash(classnew button) {
         if (button != flashButton) {
             flashButton = button;
             flashOn = false;
@@ -486,8 +486,8 @@ public final class ManageBar implements EveryFrameScript {
 
     private void hideOwnButton() {
         try {
-            L core = activeCore();
-            n button = core == null || core.getButtons() == null ? null : core.getButtons().getButton(BUTTON_ID);
+            S core = activeCore();
+            classnew button = core == null || core.getButtons() == null ? null : core.getButtons().getButton(BUTTON_ID);
             if (button != null) {
                 button.setOpacity(0f);
                 button.setEnabled(false);
