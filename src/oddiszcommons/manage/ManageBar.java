@@ -15,19 +15,20 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.lwjgl.input.Keyboard;
 
+import com.fs.graphics.util.Fader;
 import com.fs.starfarer.api.EveryFrameScript;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CampaignUIAPI;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
 import com.fs.starfarer.api.graphics.SpriteAPI;
+import com.fs.starfarer.api.ui.ButtonAPI;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.PositionAPI;
 import com.fs.starfarer.api.util.IntervalUtil;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.campaign.CampaignState;
-import com.fs.starfarer.ui.classnew;
 import com.fs.starfarer.ui.newui.S;
-import com.fs.starfarer.ui.newui.X;
+import com.fs.starfarer.ui.newui.voidsuper;
 
 /**
  * Puts the Manage button on the campaign bottom bar and shares it with other mods.
@@ -40,7 +41,9 @@ import com.fs.starfarer.ui.newui.X;
  * is in charge, it hands that mod one tab per page.
  *
  * <p>The game classes used here ({@code CampaignState}, the core screen {@code S}, the bar
- * {@code X}, the button {@code classnew}) are the game's own, compiled against 0.98.5a. Any error
+ * {@code voidsuper}) are the game's own, compiled against 0.98.5a-RC6. The button's own class is
+ * never named: it is held as a ButtonAPI or through {@code var}, so a rename of it only needs a
+ * rebuild. Any error
  * turns the button off for the session instead of breaking the game.
  */
 public final class ManageBar implements EveryFrameScript {
@@ -80,7 +83,7 @@ public final class ManageBar implements EveryFrameScript {
     private final Set<String> handedOver = new HashSet<>();
     private boolean foreignFailed;
     private boolean newerContractLogged;
-    private classnew flashButton;
+    private ButtonAPI flashButton;
     private boolean flashOn;
     private boolean plateSkippedLogged;
 
@@ -295,14 +298,15 @@ public final class ManageBar implements EveryFrameScript {
         if (core == null) {
             return;
         }
-        X bar = core.getButtons();
+        voidsuper bar = core.getButtons();
         if (bar == null) {
             return;
         }
         syncOwnTenants();
-        classnew button = bar.getButton(BUTTON_ID);
+        var button = bar.getButton(BUTTON_ID);
         if (button == null) {
-            button = addButton(bar);
+            addButton(bar);
+            button = bar.getButton(BUTTON_ID);
         }
         if (!hosting || !(memory.get(HANDSHAKE_KEY) instanceof Map)) {
             hosting = true;
@@ -312,7 +316,7 @@ public final class ManageBar implements EveryFrameScript {
             note.put(KEY_SEAM, ManageBar.class.getName());
             memory.set(HANDSHAKE_KEY, note);
         }
-        updateFlash(button);
+        updateFlash(button, button.getFlashFader());
     }
 
     /** Our pages as tabs, kept in step with pages added or removed during the session. */
@@ -351,31 +355,30 @@ public final class ManageBar implements EveryFrameScript {
         return state.getCore();
     }
 
-    private classnew addButton(X bar) {
+    private void addButton(voidsuper bar) {
         float ownEnd = gameButtonsEnd(bar);
         addPlate(bar, ownEnd);
         // The bar places a new button right of its last one and grows to fit it.
         bar.addButton(BUTTON_LABEL, BUTTON_ID, null, (input, source) -> onButtonClicked());
-        classnew button = bar.getButton(BUTTON_ID);
+        ButtonAPI button = bar.getButton(BUTTON_ID);
         if (button == null) {
             throw new IllegalStateException("the bottom bar did not keep the Manage button");
         }
         button.setShortcut(SHORTCUT, false);
-        return button;
     }
 
     /** Where the bar's buttons end, measured from the bar's left edge. */
-    private static float gameButtonsEnd(X bar) {
+    private static float gameButtonsEnd(voidsuper bar) {
         PositionAPI barPos = bar.getPosition();
         float end = 0f;
-        for (classnew b : bar.getButtons().values()) {
+        for (ButtonAPI b : bar.getButtons().values()) {
             PositionAPI p = b.getPosition();
             end = Math.max(end, p.getX() + p.getWidth() - barPos.getX());
         }
         return end;
     }
 
-    private void addPlate(X bar, float ownEnd) {
+    private void addPlate(voidsuper bar, float ownEnd) {
         SpriteAPI plate = Global.getSettings().getSprite("ui", "tripad_button_holder");
         float cell = bar.BUTTON_WIDTH + bar.BUTTON_PAD;
         float edge = plate == null ? -1f : plate.getWidth() - ownEnd;
@@ -395,7 +398,7 @@ public final class ManageBar implements EveryFrameScript {
     private void onButtonClicked() {
         try {
             S core = activeCore();
-            classnew button = core == null || core.getButtons() == null ? null : core.getButtons().getButton(BUTTON_ID);
+            ButtonAPI button = core == null || core.getButtons() == null ? null : core.getButtons().getButton(BUTTON_ID);
             if (button != null) {
                 button.setChecked(false);
             }
@@ -420,7 +423,7 @@ public final class ManageBar implements EveryFrameScript {
             if (core == null || core.getButtons() == null) {
                 return false;
             }
-            classnew button = core.getButtons().getButton(BUTTON_ID);
+            var button = core.getButtons().getButton(BUTTON_ID);
             if (button == null) {
                 return false;
             }
@@ -458,7 +461,7 @@ public final class ManageBar implements EveryFrameScript {
     }
 
     /** The button pulses while any tab has news, like the game's own "Character +". */
-    private void updateFlash(classnew button) {
+    private void updateFlash(ButtonAPI button, Fader fader) {
         if (button != flashButton) {
             flashButton = button;
             flashOn = false;
@@ -472,13 +475,13 @@ public final class ManageBar implements EveryFrameScript {
         }
         if (want && !flashOn) {
             button.flash(false, 0.25f, 0.25f);
-            if (button.getFlashFader() != null) {
-                button.getFlashFader().setBounceUp(true);
+            if (fader != null) {
+                fader.setBounceUp(true);
             }
             flashOn = true;
         } else if (!want && flashOn) {
-            if (button.getFlashFader() != null) {
-                button.getFlashFader().setBounceUp(false);
+            if (fader != null) {
+                fader.setBounceUp(false);
             }
             flashOn = false;
         }
@@ -487,7 +490,7 @@ public final class ManageBar implements EveryFrameScript {
     private void hideOwnButton() {
         try {
             S core = activeCore();
-            classnew button = core == null || core.getButtons() == null ? null : core.getButtons().getButton(BUTTON_ID);
+            ButtonAPI button = core == null || core.getButtons() == null ? null : core.getButtons().getButton(BUTTON_ID);
             if (button != null) {
                 button.setOpacity(0f);
                 button.setEnabled(false);

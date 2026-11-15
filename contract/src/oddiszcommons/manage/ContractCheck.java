@@ -119,7 +119,7 @@ public final class ContractCheck {
                 "the screen is one of the game's own panels");
         check(Class.forName("com.fs.starfarer.ui.newui.b").isAssignableFrom(shell),
                 "the screen hears when its tab closes");
-        Class<?> bar = Class.forName("com.fs.starfarer.ui.newui.X");
+        Class<?> bar = Class.forName("com.fs.starfarer.ui.newui.voidsuper");
         Method addButton = null;
         for (Method m : bar.getMethods()) {
             if (m.getName().equals("addButton") && m.getParameterCount() == 4) {
@@ -140,6 +140,13 @@ public final class ContractCheck {
                 "the core screen still has its size limits, bar, current tab and close");
         check(Class.forName("com.fs.starfarer.campaign.CampaignState").getMethod("getCore") != null,
                 "the campaign still hands out its core screen");
+        Class<?> button = bar.getMethod("getButton", Object.class).getReturnType();
+        check(com.fs.starfarer.api.ui.ButtonAPI.class.isAssignableFrom(button)
+                && button.getMethod("getFlashFader") != null,
+                "the bar's buttons are ButtonAPI and still have their flash fader");
+        check(Class.forName("com.fs.starfarer.campaign.CampaignState").getMethod("getEncounterDialog")
+                .getReturnType().getMethod("getCoreUI").getReturnType() == core,
+                "while docked, the encounter dialog still hands out the same kind of core screen");
     }
 
     private static Method staticMethod(Class<?> cls, String name, int args) {

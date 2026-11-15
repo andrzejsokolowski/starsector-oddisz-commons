@@ -58,12 +58,13 @@ Other mods depend on it, so keep the public API (`oddiszcommons.manage.Manage`, 
   `registerTenant(modId, label, factoryClass, attentionKey, r, g, b)`.
 - A tab is only a class name with static `buildMgmtConsole(float, float)` and `releaseMgmtConsole()`, with no
   page id passed. So each page owns one of the 12 classes in `Slots` (`Slots$S0` to `Slots$S11`).
-- Game classes called directly (compiled against 0.98.5a-RC4 since 0.4.0): `CampaignState.getCore()`,
+- Game classes called directly (compiled against 0.98.5a-RC6 since 0.4.1): `CampaignState.getCore()`,
   `getEncounterDialog().getCoreUI()` when docked, core screen `ui.newui.S` (`getButtons`,
   `showPanelAsDialog`, `computePanelWidth`, `MAX_INTEL_WIDTH`, `getCurrentTab`, `dismiss`), the bar
-  `ui.newui.X` (`addButton(label, id, null, listener)`, `getButton`, `BUTTON_WIDTH`, `BUTTON_PAD`),
-  the button `ui.classnew`, the listener `ui.U` and the tab panel `ui.z` with `ui.newui.b.tabClosed`.
+  `ui.newui.voidsuper` (`addButton(label, id, null, listener)`, `getButton`, `BUTTON_WIDTH`, `BUTTON_PAD`),
+  the button (held as `ButtonAPI` or `var`, never named: its class is `ui.o0O0OOO...` in RC6), the listener `ui.U` and the tab panel `ui.z` with `ui.newui.b.tabClosed`.
   In 0.98a these were `ui.newui.L`, `ui.newui.thissuper`, `ui.n`, `ui.interfacenew` and `ui.newui.Y`.
+  0.98.5a-RC4 had the bar as `ui.newui.X` and the button as `ui.classnew`; the RC6 hotfix renamed them again.
   The 0.98.5a bar still has the same 7 game buttons and the same backing image.
   A game update can rename these: `checkContract` then fails. Any error at run time turns the button off
   for the session.
