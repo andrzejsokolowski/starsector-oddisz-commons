@@ -4,9 +4,9 @@
 	"modName":"OddiszCommons",
 	"modThreadId":36282,
 	"modVersion": {
-		"major":0,
-		"minor":4,
-		"patch":1
+		"major":1,
+		"minor":0,
+		"patch":0
 	},
 	"starsectorVersion":"0.98.5a-RC4",
 	"directDownloadURL":"https://github.com/andrzejsokolowski/starsector-oddisz-commons/releases/latest/download/OddiszCommons.zip"
