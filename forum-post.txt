@@ -13,7 +13,7 @@ Install it when one of my mods asks for it. On its own it adds nothing you will 
 [hr][center][size=12pt][b]Needed By[/b][/size][/center][hr]
 [list]
 [li][url=https://fractalsoftworks.com/forum/index.php?topic=36168]Omega Core Everywhere[/url] 1.2.3 and newer[/li]
-[li][url=https://fractalsoftworks.com/forum/index.php?topic=36167]Astral Ascension Renewed[/url] 1.0.2 and newer[/li]
+[li][url=https://fractalsoftworks.com/forum/index.php?topic=36167]Colonial Hypergrowth[/url] 1.0.2 and newer[/li]
 [li][url=https://fractalsoftworks.com/forum/index.php?topic=36178]Toolbox Economy Curves[/url] 1.0.3 and newer[/li]
 [li][url=https://github.com/andrzejsokolowski/starsector-landlordsector/releases/latest]Landlordsector[/url][/li]
 [/list]
@@ -34,7 +34,7 @@ Install it when one of my mods asks for it. On its own it adds nothing you will 
 
 [hr][center][size=12pt][b]Loading Screen Tips[/b][/size][/center][hr]
 [list]
-[li]Tips for Sol Renewed, Astral Ascension Renewed, Omega Core Everywhere, Landlordsector, Missions - Renewed, New Game Plus - Renewed, Achievements - Renewed, Extra System Reloaded - Oddisz Edition, Weapon Designer, The Everything Shop, Intel Renewed, StopBloatingMe and Cloning on the loading screen and the main menu.[/li]
+[li]Tips for Sol Renewed, Colonial Hypergrowth, Omega Core Everywhere, Landlordsector, Missions - Renewed, New Game Plus - Renewed, Achievements - Renewed, Extra System Reloaded - Oddisz Edition, Weapon Designer, The Everything Shop, Intel Renewed, StopBloatingMe and Cloning on the loading screen and the main menu.[/li]
 [li]A tip only shows when its mod is installed.[/li]
 [/list]
 
@@ -64,6 +64,8 @@ This mod is under the CC0 (Creative Commons Zero) License, allowing you to do wh
 [/spoiler]
 
 [spoiler=Version log]
+[b]1.0.1[/b]
+[list][li]Astral Ascension Renewed is now called Colonial Hypergrowth: the mod description and its loading screen tip use the new name.[/li][/list]
 [b]1.0.0[/b]
 [list][li]Version 1.0.0: the mod is now considered stable. No gameplay changes.[/li][/list]
 [b]0.4.1[/b]

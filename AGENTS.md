@@ -28,7 +28,7 @@ Other mods depend on it, so keep the public API (`oddiszcommons.manage.Manage`, 
 ## The colony ledger
 
 - `oddiszcommons.ledger.Ledger` (ODC-2, 0.2.0) replaced the copies in Omega Core Everywhere,
-  Astral Ascension Renewed and Toolbox Economy Curves. Those three mods require OddiszCommons and
+  Colonial Hypergrowth and Toolbox Economy Curves. Those three mods require OddiszCommons and
   compile against `../OddiszCommons/jars/OddiszCommons.jar`, so build this project first.
 - Changes are keyed by target object (identity) and by kind plus id (`mult:`, `flat:`, `hold:`), so a
   mult and a flat under one id on one stat are separate.

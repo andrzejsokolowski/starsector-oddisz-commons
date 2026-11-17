@@ -4,7 +4,7 @@
 	# entries. "freq" is optional (default 1, the same as every base game tip).
 	"tips":[
 		{"mod":"sol_renewed", "tip":"[Sol Renewed] - After the first Reckoning, three boss fleets each guard a planetkiller. Take all three and the attacks on Sol stop."},
-		{"mod":"astral_ascension_renewed", "tip":"[Astral Ascension Renewed] - Only a colony with an Omega core admin can grow past size 10."},
+		{"mod":"astral_ascension_renewed", "tip":"[Colonial Hypergrowth] - Only a colony with an Omega core admin can grow past size 10."},
 		{"mod":"omega_core_everywhere", "tip":"[Omega Core Everywhere] - Omega ships can drop their Omega core when destroyed. Capitals always do."},
 		{"mod":"landlordsector", "tip":"[Landlordsector] - Look for Browse real estate at any market of size 3 or more. Homes on your own colonies cost half."},
 		{"mod":"missions_renewed", "tip":"[Missions - Renewed] - Missing a contract deadline charges the penalty even if you can't pay it. Check the deadline before you sign."},

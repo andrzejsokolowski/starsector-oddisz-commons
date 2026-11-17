@@ -3,7 +3,7 @@
 A Starsector 0.98.5a library mod by Oddisz: parts that Oddisz's mods share.
 Forum topic: https://fractalsoftworks.com/forum/index.php?topic=36282
 
-Needed by Omega Core Everywhere 1.2.3, Astral Ascension Renewed 1.0.2, Toolbox Economy Curves 1.0.3
+Needed by Omega Core Everywhere 1.2.3, Colonial Hypergrowth 1.0.2, Toolbox Economy Curves 1.0.3
 (and newer) and Landlordsector.
 
 ## The Manage button
