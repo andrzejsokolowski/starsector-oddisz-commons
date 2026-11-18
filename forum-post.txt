@@ -64,6 +64,8 @@ This mod is under the CC0 (Creative Commons Zero) License, allowing you to do wh
 [/spoiler]
 
 [spoiler=Version log]
+[b]1.0.3[/b]
+[list][li]Fixed for the Starsector 0.98.5a RC7 hotfix: the Manage button and the loading screen tips work again[/li][/list]
 [b]1.0.2[/b]
 [list][li]When another mod's Manage button is on the bottom bar (Project Arondight, Captain's Quarters, Liminal, Nomad Flotilla), the pages of Oddisz's mods are added to it even when OddiszCommons' own button does not fit the game version[/li][li]When no Manage button can show these pages, they appear as a Manage entry in the intel screen, which opens the same tabs[/li][/list]
 [b]1.0.1[/b]

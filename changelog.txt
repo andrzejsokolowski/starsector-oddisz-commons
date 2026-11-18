@@ -1,3 +1,6 @@
+Version 1.0.3 (2026-11-18)
+- Fixed for the Starsector 0.98.5a RC7 hotfix: the Manage button and the loading screen tips work again
+
 Version 1.0.2 (2026-11-18)
 - When another mod's Manage button is on the bottom bar (Project Arondight, Captain's Quarters, Liminal, Nomad Flotilla), the pages of Oddisz's mods are added to it even when OddiszCommons' own button does not fit the game version
 - When no Manage button can show these pages, they appear as a Manage entry in the intel screen, which opens the same tabs

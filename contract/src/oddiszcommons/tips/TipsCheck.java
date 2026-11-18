@@ -53,7 +53,7 @@ public final class TipsCheck {
                 && Math.abs(oddPicker.getWeight(0) - 0.25f) < 1e-6f, "null, blank and freq 0 entries are skipped, freq is kept");
 
         // Do not initialise the game class: its UI parent class needs a running game.
-        Class<?> tipScreen = Class.forName("com.fs.starfarer.title.D", false, TipsCheck.class.getClassLoader());
+        Class<?> tipScreen = Class.forName("com.fs.starfarer.title.O0OO", false, TipsCheck.class.getClassLoader());
         Field field = tipScreen.getField("picker");
         check(Modifier.isStatic(field.getModifiers()) && field.getType() == WeightedRandomPicker.class,
                 "the game keeps its tips in the public static picker Tips adds to");

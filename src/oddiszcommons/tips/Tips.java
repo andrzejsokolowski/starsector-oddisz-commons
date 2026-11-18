@@ -30,9 +30,9 @@ public final class Tips {
         try {
             JSONArray list = Global.getSettings().getMergedJSON(FILE).getJSONArray("tips");
             ModManagerAPI mods = Global.getSettings().getModManager();
-            // The game's own tip picker (com.fs.starfarer.title.D, 0.98.5a-RC4; title.String in 0.98a). It is filled once,
+            // The game's own tip picker (com.fs.starfarer.title.O0OO, 0.98.5a-RC7 (title.D in RC4 to RC6); title.String in 0.98a). It is filled once,
             // when the game loads its strings, and read by every loading screen and the title screen.
-            int added = add(list, mods::isModEnabled, com.fs.starfarer.title.D.picker);
+            int added = add(list, mods::isModEnabled, com.fs.starfarer.title.O0OO.picker);
             log.info("OddiszCommons: added " + added + " tips for installed mods");
         } catch (Throwable t) {
             if (t instanceof VirtualMachineError && !(t instanceof StackOverflowError)) throw (VirtualMachineError) t;
