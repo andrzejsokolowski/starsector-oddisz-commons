@@ -14,7 +14,8 @@ import com.fs.starfarer.api.Global;
  * </pre>
  *
  * Add the page once, in {@code onApplicationLoad}. It stays for the whole game session, across
- * save loads. The button appears as soon as one page exists.
+ * save loads. The button appears as soon as one page exists. When no Manage button on the bottom bar
+ * can show the pages, they appear in the intel screen instead (1.0.2).
  */
 public final class Manage {
 
@@ -63,6 +64,16 @@ public final class Manage {
      * Returns false when the screen cannot open right now (no campaign, a menu or dialog in the way).
      */
     public static boolean openPage(String modId) {
-        return ManageBar.openOn(modId);
+        try {
+            if (ManageBar.openOn(modId)) {
+                return true;
+            }
+        } catch (Throwable ignored) {
+            // The bar code no longer fits the game: the fallbacks below still work.
+        }
+        if (ManageJoin.openOnForeign(modId)) {
+            return true;
+        }
+        return ManageDialog.open(modId);
     }
 }

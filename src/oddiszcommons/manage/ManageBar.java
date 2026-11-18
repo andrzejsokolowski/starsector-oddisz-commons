@@ -1,8 +1,6 @@
 package oddiszcommons.manage;
 
 import java.awt.Color;
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.MethodType;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -38,7 +36,8 @@ import com.fs.starfarer.ui.newui.voidsuper;
  * the bottom bar adds the button and writes its class name there, and the others hand that class
  * their tabs. OddiszCommons follows the same agreement (version {@link #CONTRACT_VERSION}). When it
  * is in charge, the public static methods below are the ones the other mods call. When another mod
- * is in charge, it hands that mod one tab per page.
+ * is in charge, {@link ManageJoin} (1.0.2: kept apart, so it works even when this class breaks) hands that mod one
+ * tab per page.
  *
  * <p>The game classes used here ({@code CampaignState}, the core screen {@code S}, the bar
  * {@code voidsuper}) are the game's own, compiled against 0.98.5a-RC6. The button's own class is
@@ -61,11 +60,6 @@ public final class ManageBar implements EveryFrameScript {
     /** The added plate sits under one button; anything outside this range means the bar changed. */
     private static final float MAX_EDGE = 40f;
 
-    private static final MethodType REGISTER = MethodType.methodType(void.class, String.class, String.class,
-            String.class, String.class, int.class, int.class, int.class);
-    private static final MethodType NO_ARGS_BOOLEAN = MethodType.methodType(boolean.class);
-    private static final MethodType SELECT = MethodType.methodType(void.class, String.class);
-
     private static final Logger LOG = Global.getLogger(ManageBar.class);
 
     /** Every tab while OddiszCommons is in charge: our pages and the tabs other mods handed over. */
@@ -73,16 +67,10 @@ public final class ManageBar implements EveryFrameScript {
 
     private static ManageBar live;
     private static ManageShell openShell;
-    private static volatile String queuedSelect;
 
     private final IntervalUtil interval = new IntervalUtil(0.15f, 0.25f);
     private boolean dead;
     private boolean hosting;
-    /** The other mod in charge this session, and which of our pages it already has. */
-    private String foreignSeam;
-    private final Set<String> handedOver = new HashSet<>();
-    private boolean foreignFailed;
-    private boolean newerContractLogged;
     private ButtonAPI flashButton;
     private boolean flashOn;
     private boolean plateSkippedLogged;
@@ -106,7 +94,7 @@ public final class ManageBar implements EveryFrameScript {
 
     /** Opens this tab the next time the screen shows, or right away if it is open. */
     public static void requestTabSelect(String modId) {
-        queuedSelect = modId;
+        ManageQueue.request(modId);
     }
 
     /** Opens the Manage screen, as a click on the button would. */
@@ -118,31 +106,17 @@ public final class ManageBar implements EveryFrameScript {
     // ---- For Manage and the screen -----------------------------------------------------------------
 
     static String takeQueuedSelect() {
-        String s = queuedSelect;
-        queuedSelect = null;
-        return s;
+        return ManageQueue.take();
     }
 
+    /** Opens our own Manage screen on this page while OddiszCommons is in charge. */
     static boolean openOn(String modId) {
         ManageBar l = live;
-        if (l == null || l.dead) {
+        if (l == null || l.dead || !l.hosting) {
             return false;
         }
-        if (l.hosting) {
-            requestTabSelect(modId);
-            return l.openScreen();
-        }
-        if (l.foreignSeam != null && l.handedOver.contains(modId)) {
-            try {
-                Class<?> seam = Class.forName(l.foreignSeam);
-                MethodHandles.publicLookup().findStatic(seam, "requestTabSelect", SELECT).invoke(modId);
-                return (boolean) MethodHandles.publicLookup()
-                        .findStatic(seam, "openManagementScreen", NO_ARGS_BOOLEAN).invoke();
-            } catch (Throwable t) {
-                return false;
-            }
-        }
-        return false;
+        requestTabSelect(modId);
+        return l.openScreen();
     }
 
     static synchronized void shellClosed(ManageShell shell) {
@@ -155,18 +129,15 @@ public final class ManageBar implements EveryFrameScript {
         return new ArrayList<>(TENANTS.values());
     }
 
-    /** Called from the mod plugin on every load, before the first frame. */
+    /**
+     * Called from the mod plugin on every load, before the first frame, after {@link ManageJoin#onGameLoad} (which
+     * clears the agreement's note and the queued tab).
+     */
     public static void onGameLoad() {
         synchronized (ManageBar.class) {
             TENANTS.clear();
             openShell = null;
         }
-        queuedSelect = null;
-        ManageScreen.forgetLastTab();
-        // A note left in the save names whoever was in charge last time, maybe a mod that is gone.
-        // Every mod in the agreement clears it on load and the first one to find the bar this time
-        // writes it again.
-        Global.getSector().getMemoryWithoutUpdate().unset(HANDSHAKE_KEY);
         if (!Global.getSector().hasTransientScript(ManageBar.class)) {
             Global.getSector().addTransientScript(new ManageBar());
         }
@@ -212,83 +183,16 @@ public final class ManageBar implements EveryFrameScript {
             return;
         }
         MemoryAPI memory = Global.getSector().getMemoryWithoutUpdate();
-        syncNews(memory);
-
         Object note = memory.get(HANDSHAKE_KEY);
         if (note instanceof Map && !MOD_ID.equals(((Map<?, ?>) note).get(KEY_HOST))) {
+            // Another mod runs the button: ManageJoin hands it our pages.
             hosting = false;
-            joinForeign((Map<?, ?>) note);
             return;
         }
         if (!hosting && PageRegistry.isEmpty()) {
             return;
         }
         host(memory);
-    }
-
-    /** Mirrors each page's news into the memory flag the Manage screens read. */
-    private static void syncNews(MemoryAPI memory) {
-        for (PageRegistry.Entry e : PageRegistry.all()) {
-            boolean news;
-            try {
-                news = e.page.hasNews();
-            } catch (Throwable t) {
-                news = false;
-            }
-            if (news) {
-                memory.set(e.newsKey(), Boolean.TRUE);
-            } else if (memory.contains(e.newsKey())) {
-                memory.unset(e.newsKey());
-            }
-        }
-    }
-
-    // ---- Another mod is in charge --------------------------------------------------------------------
-
-    private void joinForeign(Map<?, ?> note) {
-        Object version = note.get(KEY_VERSION);
-        if (!(version instanceof Integer) || (Integer) version > CONTRACT_VERSION) {
-            if (!newerContractLogged) {
-                newerContractLogged = true;
-                LOG.warn("OddiszCommons: another mod runs the Manage button with agreement version "
-                        + version + ", this one knows " + CONTRACT_VERSION + ". The pages of Oddisz's mods"
-                        + " stay off that button this session.");
-            }
-            return;
-        }
-        Object seam = note.get(KEY_SEAM);
-        if (!(seam instanceof String)) {
-            return;
-        }
-        if (!seam.equals(foreignSeam)) {
-            foreignSeam = (String) seam;
-            handedOver.clear();
-            foreignFailed = false;
-        }
-        if (foreignFailed) {
-            return;
-        }
-        for (PageRegistry.Entry e : PageRegistry.all()) {
-            if (handedOver.contains(e.modId)) {
-                continue;
-            }
-            try {
-                handOver(foreignSeam, e);
-                handedOver.add(e.modId);
-            } catch (Throwable t) {
-                foreignFailed = true;
-                LOG.warn("OddiszCommons: could not add the page of " + e.modId + " to the Manage button of "
-                        + note.get(KEY_HOST) + ".", t);
-                return;
-            }
-        }
-    }
-
-    /** Hands one page to another mod's Manage button, through the agreement's registerTenant. */
-    static void handOver(String seamClass, PageRegistry.Entry e) throws Throwable {
-        Color c = e.tabColor != null ? e.tabColor : Misc.getBrightPlayerColor();
-        MethodHandles.publicLookup().findStatic(Class.forName(seamClass), "registerTenant", REGISTER)
-                .invoke(e.modId, e.tabName, e.factoryClass(), e.newsKey(), c.getRed(), c.getGreen(), c.getBlue());
     }
 
     // ---- OddiszCommons is in charge -----------------------------------------------------------------

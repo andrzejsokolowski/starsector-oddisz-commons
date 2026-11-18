@@ -68,6 +68,13 @@ Other mods depend on it, so keep the public API (`oddiszcommons.manage.Manage`, 
   The 0.98.5a bar still has the same 7 game buttons and the same backing image.
   A game update can rename these: `checkContract` then fails. Any error at run time turns the button off
   for the session.
+- 1.0.2 (ODC ticket "Landlordsector page missing when one of Mamick's mods runs the Manage button"): everything
+  that must survive a game update lives in classes that name no hidden game class (`checkContract` verifies it):
+  `ManageJoin` (transient script: news flags, clearing `$mgmt_bar` on load, handing our pages to another mod's
+  button), `ManageIntel` + `ManageDialog` (when no button shows our pages for 3 s: a "Manage" intel entry whose
+  buttons open `ManageScreen` in `showCustomVisualDialog`, Escape or Close leaves), `ManageQueue` (queued tab).
+  `ManageBar` only runs our own button; the plugin calls `ManageJoin.onGameLoad` first and `ManageBar.onGameLoad`
+  inside a try. `Manage.openPage` tries our button, then the other mod's, then the dialog.
 - `BarPlate` extends the bar's backing image (`ui/tripad_button_holder`, 914 px, game buttons end at 903)
   under the added button.
 - Project Arondight, Captain's Quarters and Liminal (Mamick, GPL 3) carry the other side. This code is

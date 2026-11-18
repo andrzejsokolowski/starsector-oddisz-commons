@@ -23,6 +23,7 @@ public final class ContractCheck {
         seamAsOtherModsSeeIt();
         pagesThroughTheirEntryPoints();
         handingPagesToAnotherButton();
+        fallbackNeedsNoGameInternals();
         linksAgainstTheGame();
         System.out.println("Manage button agreement: " + (checks - failures) + " of " + checks + " checks passed");
         if (failures > 0) {
@@ -102,7 +103,7 @@ public final class ContractCheck {
     /** Another mod in charge: OddiszCommons hands it one tab per page. */
     private static void handingPagesToAnotherButton() throws Throwable {
         PageRegistry.Entry eb = PageRegistry.get("mod_b");
-        ManageBar.handOver(FakeHost.class.getName(), eb);
+        ManageJoin.handOver(FakeHost.class.getName(), eb);
         check(FakeHost.calls.size() == 1, "one tab is handed over per page");
         Object[] call = FakeHost.calls.get(0);
         check("mod_b".equals(call[0]) && "B".equals(call[1]) && eb.factoryClass().equals(call[2]),
@@ -110,6 +111,32 @@ public final class ContractCheck {
         check("$oddisz_commons_news_mod_b".equals(call[3]), "the handed tab carries the news flag");
         check(Integer.valueOf(4).equals(call[4]) && Integer.valueOf(5).equals(call[5]) && Integer.valueOf(6).equals(call[6]),
                 "the handed tab keeps its colour");
+    }
+
+    /**
+     * 1.0.2: the parts that must keep working after a game update (handing pages to another mod's button, the intel
+     * screen fallback, the screen they open) name no hidden game class. Only ManageBar, ManageShell and BarPlate may.
+     */
+    private static void fallbackNeedsNoGameInternals() throws Throwable {
+        String[] clean = {"Manage", "ManageJoin", "ManageIntel", "ManageDialog", "ManageQueue", "ManageScreen",
+                "Tenant", "PageRegistry", "Slots", "ManagePage"};
+        for (String name : clean) {
+            for (String cls : new String[] {name, name + "$Delegate", name + "$Plugin", name + "$1", name + "$Delegate$1"}) {
+                java.io.InputStream in = ContractCheck.class.getResourceAsStream(cls + ".class");
+                if (in == null) continue;
+                String text = new String(in.readAllBytes(), "ISO-8859-1");
+                in.close();
+                boolean internal = text.contains("com/fs/starfarer/ui/") || text.contains("com/fs/starfarer/campaign/")
+                        || text.contains("ManageBar") || text.contains("ManageShell") || text.contains("com/fs/graphics/");
+                // Manage and ManageJoin may call ManageBar inside a try (it is loaded only there).
+                if (name.equals("Manage") || name.equals("ManageJoin")) {
+                    internal = text.contains("com/fs/starfarer/ui/") || text.contains("com/fs/starfarer/campaign/")
+                            || text.contains("ManageShell") || text.contains("com/fs/graphics/");
+                }
+                check(!internal, cls + " names no hidden game class");
+            }
+        }
+        check(ManageJoin.intelClass() == ManageIntel.class, "the intel fallback is there");
     }
 
     /** The classes built on the game's own screen classes load against this game version. */

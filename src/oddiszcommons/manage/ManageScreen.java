@@ -24,6 +24,7 @@ final class ManageScreen {
     static final float CONTENT_TOP = TAB_HEIGHT + 8f;
     private static final float FLASH_EVERY = 0.6f;
     private static final String TAB_PREFIX = "oddisz_commons_tab:";
+    private static final String CLOSE_ID = "oddisz_commons_close";
 
     /** The tab the player last looked at, so the screen reopens on it. */
     private static String lastTab;
@@ -36,8 +37,15 @@ final class ManageScreen {
     private CustomPanelAPI content;
     private Tenant selected;
     private float flashTimer;
+    /** 1.0.2: closes the dialog the screen sits in (the intel fallback); null on the bottom bar's tab. */
+    private final Runnable onClose;
 
     ManageScreen(List<Tenant> tenants, float width, float height) {
+        this(tenants, width, height, null);
+    }
+
+    ManageScreen(List<Tenant> tenants, float width, float height, Runnable onClose) {
+        this.onClose = onClose;
         this.tenants = tenants;
         this.width = width;
         this.height = height;
@@ -68,6 +76,11 @@ final class ManageScreen {
             tab.getPosition().inTL(i * (TAB_WIDTH + TAB_GAP), 2f);
             tabButtons.put(t.modId, tab);
             i++;
+        }
+        if (onClose != null) {
+            ButtonAPI close = row.addButton("Close", CLOSE_ID, Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(),
+                    Alignment.MID, CutStyle.TOP, 100f, TAB_HEIGHT, 0f);
+            close.getPosition().inTL(width - 100f, 2f);
         }
         root.addUIElement(row).inTL(0f, 0f);
     }
@@ -143,6 +156,10 @@ final class ManageScreen {
 
         @Override
         public void buttonPressed(Object buttonId) {
+            if (CLOSE_ID.equals(buttonId) && onClose != null) {
+                onClose.run();
+                return;
+            }
             if (buttonId instanceof String && ((String) buttonId).startsWith(TAB_PREFIX)) {
                 select(((String) buttonId).substring(TAB_PREFIX.length()));
             }
@@ -150,7 +167,7 @@ final class ManageScreen {
 
         @Override
         public void advance(float amount) {
-            String queued = ManageBar.takeQueuedSelect();
+            String queued = ManageQueue.take();
             if (queued != null) {
                 select(queued);
             }
