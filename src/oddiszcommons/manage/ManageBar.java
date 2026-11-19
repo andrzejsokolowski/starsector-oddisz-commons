@@ -25,8 +25,10 @@ import com.fs.starfarer.api.ui.PositionAPI;
 import com.fs.starfarer.api.util.IntervalUtil;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.campaign.CampaignState;
-import com.fs.starfarer.ui.newui.oOOo;
-import com.fs.starfarer.ui.newui.Y;
+// 0.98.5a-RC8: the core screen's class name is 256 letters long (oOOo then O's); it is named here and in
+// activeCore's return type, everywhere else the code says var.
+import com.fs.starfarer.ui.newui.oOOoOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO;
+import com.fs.starfarer.ui.newui.returnsuper;
 
 /**
  * Puts the Manage button on the campaign bottom bar and shares it with other mods.
@@ -39,8 +41,8 @@ import com.fs.starfarer.ui.newui.Y;
  * is in charge, {@link ManageJoin} (1.0.2: kept apart, so it works even when this class breaks) hands that mod one
  * tab per page.
  *
- * <p>The game classes used here ({@code CampaignState}, the core screen {@code oOOo}, the bar
- * {@code Y}) are the game's own, compiled against 0.98.5a-RC7. The button's own class is
+ * <p>The game classes used here ({@code CampaignState}, the core screen {@code ui.newui.oOOoOO...} with a
+ * 256-letter name, the bar {@code returnsuper}) are the game's own, compiled against 0.98.5a-RC8. The button's own class is
  * never named: it is held as a ButtonAPI or through {@code var}, so a rename of it only needs a
  * rebuild. Any error
  * turns the button off for the session instead of breaking the game.
@@ -198,11 +200,11 @@ public final class ManageBar implements EveryFrameScript {
     // ---- OddiszCommons is in charge -----------------------------------------------------------------
 
     private void host(MemoryAPI memory) {
-        oOOo core = activeCore();
+        var core = activeCore();
         if (core == null) {
             return;
         }
-        Y bar = core.getButtons();
+        var bar = core.getButtons();
         if (bar == null) {
             return;
         }
@@ -246,7 +248,7 @@ public final class ManageBar implements EveryFrameScript {
     }
 
     /** The core screen whose bar is on screen: the campaign's own, or the one opened while docked. */
-    private static oOOo activeCore() {
+    private static oOOoOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO activeCore() {
         CampaignUIAPI ui = Global.getSector().getCampaignUI();
         if (!(ui instanceof CampaignState)) {
             return null;
@@ -259,7 +261,7 @@ public final class ManageBar implements EveryFrameScript {
         return state.getCore();
     }
 
-    private void addButton(Y bar) {
+    private void addButton(returnsuper bar) {
         float ownEnd = gameButtonsEnd(bar);
         addPlate(bar, ownEnd);
         // The bar places a new button right of its last one and grows to fit it.
@@ -272,7 +274,7 @@ public final class ManageBar implements EveryFrameScript {
     }
 
     /** Where the bar's buttons end, measured from the bar's left edge. */
-    private static float gameButtonsEnd(Y bar) {
+    private static float gameButtonsEnd(returnsuper bar) {
         PositionAPI barPos = bar.getPosition();
         float end = 0f;
         for (ButtonAPI b : bar.getButtons().values()) {
@@ -282,7 +284,7 @@ public final class ManageBar implements EveryFrameScript {
         return end;
     }
 
-    private void addPlate(Y bar, float ownEnd) {
+    private void addPlate(returnsuper bar, float ownEnd) {
         SpriteAPI plate = Global.getSettings().getSprite("ui", "tripad_button_holder");
         float cell = bar.BUTTON_WIDTH + bar.BUTTON_PAD;
         float edge = plate == null ? -1f : plate.getWidth() - ownEnd;
@@ -301,7 +303,7 @@ public final class ManageBar implements EveryFrameScript {
 
     private void onButtonClicked() {
         try {
-            oOOo core = activeCore();
+            var core = activeCore();
             ButtonAPI button = core == null || core.getButtons() == null ? null : core.getButtons().getButton(BUTTON_ID);
             if (button != null) {
                 button.setChecked(false);
@@ -323,7 +325,7 @@ public final class ManageBar implements EveryFrameScript {
                 return false;
             }
             boolean docked = ui.getCurrentInteractionDialog() != null;
-            oOOo core = activeCore();
+            var core = activeCore();
             if (core == null || core.getButtons() == null) {
                 return false;
             }
@@ -346,8 +348,8 @@ public final class ManageBar implements EveryFrameScript {
             if (tenants.isEmpty()) {
                 return false;
             }
-            float width = Math.min(core.computePanelWidth(true), oOOo.MAX_INTEL_WIDTH);
-            float height = Math.min(core.computePanelHeight(true), oOOo.MAX_INTEL_HEIGHT);
+            float width = Math.min(core.computePanelWidth(true), oOOoOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO.MAX_INTEL_WIDTH);
+            float height = Math.min(core.computePanelHeight(true), oOOoOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO.MAX_INTEL_HEIGHT);
             ManageShell shell = new ManageShell(tenants, width, height);
             core.showPanelAsDialog(button, shell, true, false);
             if (core.getCurrentTab() != shell) {
@@ -393,7 +395,7 @@ public final class ManageBar implements EveryFrameScript {
 
     private void hideOwnButton() {
         try {
-            oOOo core = activeCore();
+            var core = activeCore();
             ButtonAPI button = core == null || core.getButtons() == null ? null : core.getButtons().getButton(BUTTON_ID);
             if (button != null) {
                 button.setOpacity(0f);

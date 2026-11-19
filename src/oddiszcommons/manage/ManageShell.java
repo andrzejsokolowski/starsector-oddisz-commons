@@ -6,7 +6,7 @@ import java.util.List;
  * The game shows a bottom bar tab as one of its own panels, and tells that panel when the tab
  * closes. This is that panel. It holds the {@link ManageScreen} and nothing else.
  */
-public class ManageShell extends com.fs.starfarer.ui.o000 implements com.fs.starfarer.ui.newui.floatsuper {
+public class ManageShell extends com.fs.starfarer.ui.interfacenew implements com.fs.starfarer.ui.newui.b {
 
     private final ManageScreen screen;
 

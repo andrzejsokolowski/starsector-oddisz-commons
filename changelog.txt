@@ -1,3 +1,6 @@
+Version 1.0.4 (2026-11-19)
+- Fixed for the Starsector 0.98.5a RC8 hotfix: the Manage button works again
+
 Version 1.0.3 (2026-11-18)
 - Fixed for the Starsector 0.98.5a RC7 hotfix: the Manage button and the loading screen tips work again
 

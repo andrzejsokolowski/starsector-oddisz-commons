@@ -142,11 +142,11 @@ public final class ContractCheck {
     /** The classes built on the game's own screen classes load against this game version. */
     private static void linksAgainstTheGame() throws Throwable {
         Class<?> shell = Class.forName(ManageShell.class.getName(), false, ContractCheck.class.getClassLoader());
-        check(shell.getSuperclass().getName().equals("com.fs.starfarer.ui.o000"),
+        check(shell.getSuperclass().getName().equals("com.fs.starfarer.ui.interfacenew"),
                 "the screen is one of the game's own panels");
-        check(Class.forName("com.fs.starfarer.ui.newui.floatsuper").isAssignableFrom(shell),
+        check(Class.forName("com.fs.starfarer.ui.newui.b").isAssignableFrom(shell),
                 "the screen hears when its tab closes");
-        Class<?> bar = Class.forName("com.fs.starfarer.ui.newui.Y");
+        Class<?> bar = Class.forName("com.fs.starfarer.ui.newui.returnsuper");
         Method addButton = null;
         for (Method m : bar.getMethods()) {
             if (m.getName().equals("addButton") && m.getParameterCount() == 4) {
@@ -155,7 +155,8 @@ public final class ContractCheck {
         }
         check(addButton != null && addButton.getParameterTypes()[3].getName().equals("com.fs.starfarer.ui.U"),
                 "the bottom bar still takes a button with a click listener");
-        Class<?> core = Class.forName("com.fs.starfarer.ui.newui.oOOo");
+        // 0.98.5a-RC8: the core screen is ui.newui.oOOo followed by O's, 256 letters in all.
+        Class<?> core = Class.forName("com.fs.starfarer.ui.newui." + "oOOo" + "O".repeat(252));
         boolean showPanel = false;
         for (Method m : core.getMethods()) {
             showPanel |= m.getName().equals("showPanelAsDialog") && m.getParameterCount() == 4

@@ -58,15 +58,19 @@ Other mods depend on it, so keep the public API (`oddiszcommons.manage.Manage`, 
   `registerTenant(modId, label, factoryClass, attentionKey, r, g, b)`.
 - A tab is only a class name with static `buildMgmtConsole(float, float)` and `releaseMgmtConsole()`, with no
   page id passed. So each page owns one of the 12 classes in `Slots` (`Slots$S0` to `Slots$S11`).
-- Game classes called directly (compiled against 0.98.5a-RC7 since 1.0.3): `CampaignState.getCore()`,
-  `getEncounterDialog().getCoreUI()` when docked, core screen `ui.newui.oOOo` (`getButtons`,
-  `showPanelAsDialog`, `computePanelWidth`, `MAX_INTEL_WIDTH`, `getCurrentTab`, `dismiss`), the bar
-  `ui.newui.Y` (`addButton(label, id, null, listener)`, `getButton`, `BUTTON_WIDTH`, `BUTTON_PAD`),
-  the button (held as `ButtonAPI` or `var`, never named: its class is `ui.classnew` in RC7), the listener `ui.U`
-  and the tab panel `ui.o000` with `ui.newui.floatsuper.tabClosed`. The tip picker is `title.O0OO.picker`.
+- Game classes called directly (compiled against 0.98.5a-RC8 since 1.0.4): `CampaignState.getCore()`,
+  `getEncounterDialog().getCoreUI()` when docked, core screen `ui.newui.oOOo` + 252 `O` (a 256-letter name,
+  `getButtons`, `showPanelAsDialog`, `computePanelWidth`, `MAX_INTEL_WIDTH`, `getCurrentTab`, `dismiss`; named
+  only in ManageBar's import and `activeCore`, locals use `var`), the bar `ui.newui.returnsuper`
+  (`addButton(label, id, null, listener)`, `getButton`, `BUTTON_WIDTH`, `BUTTON_PAD`), the button (held as
+  `ButtonAPI` or `var`, never named: `ui.o0O0` in RC8), the listener `ui.U` and the tab panel `ui.interfacenew`
+  with `ui.newui.b.tabClosed`. The tip picker is `title.O0OO.picker` (same name in RC7 and RC8). The addButton
+  callback type sits in a package named like a class (`title.OoOO...` + `/oOOO$oo`); javac accepts the lambda.
+  RC7 names: core `ui.newui.oOOo`, bar `ui.newui.Y`, button `ui.classnew`, panel `ui.o000`, hook
+  `ui.newui.floatsuper`.
   RC6 names: core `ui.newui.S`, bar `ui.newui.voidsuper`, panel `ui.z`, hook `ui.newui.b`, tips `title.D`.
   In 0.98a these were `ui.newui.L`, `ui.newui.thissuper`, `ui.n`, `ui.interfacenew` and `ui.newui.Y`.
-  0.98.5a-RC4 had the bar as `ui.newui.X` and the button as `ui.classnew`; the RC6 and RC7 hotfixes renamed them again.
+  0.98.5a-RC4 had the bar as `ui.newui.X` and the button as `ui.classnew`; the RC6, RC7 and RC8 hotfixes renamed them again.
   The 0.98.5a bar still has the same 7 game buttons and the same backing image.
   A game update can rename these: `checkContract` then fails. Any error at run time turns the button off
   for the session.
