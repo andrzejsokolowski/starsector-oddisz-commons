@@ -1,3 +1,6 @@
+Version 1.1.0 (2026-11-20)
+- New Others tab on the Manage screen: small mods share it instead of each taking a tab. The mods are listed on its left, the picked mod's page fills the rest.
+
 Version 1.0.4 (2026-11-19)
 - Fixed for the Starsector 0.98.5a RC8 hotfix: the Manage button works again
 

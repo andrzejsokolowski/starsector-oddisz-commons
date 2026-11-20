@@ -23,6 +23,7 @@ public final class ContractCheck {
         seamAsOtherModsSeeIt();
         pagesThroughTheirEntryPoints();
         handingPagesToAnotherButton();
+        othersTab();
         fallbackNeedsNoGameInternals();
         linksAgainstTheGame();
         System.out.println("Manage button agreement: " + (checks - failures) + " of " + checks + " checks passed");
@@ -100,6 +101,48 @@ public final class ContractCheck {
         }
     }
 
+    /** 1.1.0: small mods share one Others tab instead of a tab each. */
+    private static void othersTab() throws Throwable {
+        int before = PageRegistry.all().size();
+        check(!Manage.hasPage(Manage.OTHERS_ID), "there is no Others tab before a mod joins it");
+        NewsPage x = new NewsPage();
+        NewsPage y = new NewsPage();
+        check(Manage.addOtherPage("small_x", "X", x), "the first small mod joins the Others tab");
+        check(Manage.addOtherPage("small_y", "Y", y), "the second small mod joins the Others tab");
+        check(PageRegistry.all().size() == before + 1, "both small mods share one tab");
+        PageRegistry.Entry others = PageRegistry.get(Manage.OTHERS_ID);
+        check(others != null && others.tabName.equals("Others"), "the shared tab is called Others");
+        check(Manage.hasOtherPage("small_x") && Manage.hasOtherPage("small_y"), "both small mods are listed");
+        check(!others.page.hasNews(), "the Others tab has no news while its pages have none");
+        y.news = true;
+        check(others.page.hasNews(), "the Others tab has news while one of its pages has");
+        y.news = false;
+        Manage.addOtherPage("small_x", "X again", new NewsPage());
+        check(OthersPage.INSTANCE.snapshot().size() == 2 && OthersPage.INSTANCE.snapshot().get(0).name.equals("X again"),
+                "joining again replaces the page in place");
+        OthersPage.INSTANCE.select("small_y");
+        check("small_y".equals(OthersPage.INSTANCE.selected()), "a page can be picked in the list");
+        Manage.removeOtherPage("small_y");
+        check("small_x".equals(OthersPage.INSTANCE.selected()), "removing the picked page picks the first one left");
+        Manage.removeOtherPage("small_x");
+        check(!Manage.hasPage(Manage.OTHERS_ID), "the Others tab goes away with its last page");
+        check(PageRegistry.all().size() == before, "the Others tab frees its place");
+    }
+
+    static final class NewsPage implements ManagePage {
+        boolean news;
+
+        @Override
+        public CustomPanelAPI createPanel(float width, float height) {
+            return null;
+        }
+
+        @Override
+        public boolean hasNews() {
+            return news;
+        }
+    }
+
     /** Another mod in charge: OddiszCommons hands it one tab per page. */
     private static void handingPagesToAnotherButton() throws Throwable {
         PageRegistry.Entry eb = PageRegistry.get("mod_b");
@@ -119,9 +162,10 @@ public final class ContractCheck {
      */
     private static void fallbackNeedsNoGameInternals() throws Throwable {
         String[] clean = {"Manage", "ManageJoin", "ManageIntel", "ManageDialog", "ManageQueue", "ManageScreen",
-                "Tenant", "PageRegistry", "Slots", "ManagePage"};
+                "Tenant", "PageRegistry", "Slots", "ManagePage", "OthersPage"};
         for (String name : clean) {
-            for (String cls : new String[] {name, name + "$Delegate", name + "$Plugin", name + "$1", name + "$Delegate$1"}) {
+            for (String cls : new String[] {name, name + "$Delegate", name + "$Plugin", name + "$1", name + "$Delegate$1",
+                    name + "$View", name + "$ListPlugin", name + "$Member"}) {
                 java.io.InputStream in = ContractCheck.class.getResourceAsStream(cls + ".class");
                 if (in == null) continue;
                 String text = new String(in.readAllBytes(), "ISO-8859-1");

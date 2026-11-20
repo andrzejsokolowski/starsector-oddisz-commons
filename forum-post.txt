@@ -29,6 +29,7 @@ Install it when one of my mods asks for it. On its own it adds nothing you will 
 [list]
 [li]A [b]Manage (Y)[/b] button on the campaign bottom bar, after Command, also while docked. It opens a full screen with one tab per mod.[/li]
 [li]The button only appears when an installed mod has a page there. The tabs also open with the number keys 1 to 9.[/li]
+[li]Small mods share one [b]Others[/b] tab: they are listed on its left, and the picked one's page fills the rest.[/li]
 [li]Project Arondight, Captain's Quarters and Liminal have a Manage button of their own. With any of them installed there is still one button, with all the tabs side by side.[/li]
 [/list]
 
@@ -41,6 +42,7 @@ Install it when one of my mods asks for it. On its own it adds nothing you will 
 [hr][center][size=12pt][b]For Modders[/b][/size][/center][hr]
 [list]
 [li]Add a page: [b]Manage.addPage(modId, tabName, page)[/b] in onApplicationLoad, with a class that builds its own panel each time the tab opens.[/li]
+[li]Or join the Others tab: [b]Manage.addOtherPage(modId, name, page)[/b], same kind of page.[/li]
 [li]Keep colony changes: [b]oddiszcommons.ledger.Ledger[/b]. Put every wanted change through it each frame and call sweep(); call releaseForSave() before a save.[/li]
 [li]Add tips that only show with your mod installed: data/config/oddisz_commons/tips.json, with entries like {"mod":"your_mod_id", "tip":"..."}.[/li]
 [li]Details and examples are in the [url=https://github.com/andrzejsokolowski/starsector-oddisz-commons]README[/url].[/li]
@@ -64,6 +66,8 @@ This mod is under the CC0 (Creative Commons Zero) License, allowing you to do wh
 [/spoiler]
 
 [spoiler=Version log]
+[b]1.1.0[/b]
+[list][li]New Others tab on the Manage screen: small mods share it instead of each taking a tab. The mods are listed on its left, the picked mod's page fills the rest.[/li][/list]
 [b]1.0.4[/b]
 [list][li]Fixed for the Starsector 0.98.5a RC8 hotfix: the Manage button works again[/li][/list]
 [b]1.0.3[/b]

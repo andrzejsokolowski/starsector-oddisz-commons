@@ -53,6 +53,18 @@ public class MissionsPage implements ManagePage {
 }
 ```
 
+A small mod that needs only a little room can join the shared **Others** tab instead of taking a tab of
+its own. The Others tab lists those mods down its left side and shows the picked mod's page beside the
+list. The page is an ordinary `ManagePage`, built at the size left of the list:
+
+```java
+Manage.addOtherPage("starterpack", "StarterPack", new SnapshotPage());
+```
+
+The Others tab appears with the first page added this way and goes away with the last.
+`Manage.openOtherPage(modId)` opens the screen on the Others tab with that mod picked. The tab blinks
+while any of its pages has news.
+
 `Manage.addPage(modId, tabName, tabColor, page)` gives the tab a colour. `Manage.openPage(modId)` opens
 the screen on that page. Up to 12 pages fit. A page removed with `Manage.removePage` stays on another
 mod's button until the next load.

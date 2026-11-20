@@ -81,6 +81,11 @@ Other mods depend on it, so keep the public API (`oddiszcommons.manage.Manage`, 
   buttons open `ManageScreen` in `showCustomVisualDialog`, Escape or Close leaves), `ManageQueue` (queued tab).
   `ManageBar` only runs our own button; the plugin calls `ManageJoin.onGameLoad` first and `ManageBar.onGameLoad`
   inside a try. `Manage.openPage` tries our button, then the other mod's, then the dialog.
+- 1.1.0 (ODC ticket "Others tab on the Manage screen for small mods"): `Manage.addOtherPage(modId, name, page)` puts a
+  small mod's `ManagePage` in the shared **Others** tab (`OthersPage`, page id `Manage.OTHERS_ID`), registered with the
+  first such page and removed with the last. A list of the mods on the left (its element covers its own panel from
+  0,0, so its buttons take clicks), the picked page beside it. Andrzej's rule (2026-11-20): misc mods go there, not into
+  tabs of their own. StarterPack's snapshots are the first.
 - `BarPlate` extends the bar's backing image (`ui/tripad_button_holder`, 914 px, game buttons end at 903)
   under the added button.
 - Project Arondight, Captain's Quarters and Liminal (Mamick, GPL 3) carry the other side. This code is
