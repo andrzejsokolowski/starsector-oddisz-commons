@@ -12,7 +12,7 @@ Version 1.0.2 (2026-11-18)
 - When no Manage button can show these pages, they appear as a Manage entry in the intel screen, which opens the same tabs
 
 Version 1.0.1 (2026-11-17)
-- Astral Ascension Renewed is now called Colonial Hypergrowth: the mod description and its loading screen tip use the new name.
+- The mod description and the loading screen tip name Colonial Hypergrowth.
 
 Version 1.0.0 (2026-11-15)
 - Version 1.0.0: the mod is now considered stable. No gameplay changes.
@@ -24,7 +24,7 @@ Version 0.4.0 (2026-11-15)
 - Updated for Starsector 0.98.5a.
 
 Version 0.3.0 (2026-11-11)
-- Loading screen and main menu tips for Sol Renewed, Astral Ascension Renewed, Omega Core Everywhere, Landlordsector, Missions - Renewed, New Game Plus - Renewed, Achievements - Renewed, Extra System Reloaded - Oddisz Edition, Weapon Designer, The Everything Shop, Intel Renewed, StopBloatingMe and Cloning. A tip only shows when its mod is installed.
+- Loading screen and main menu tips for Sol Renewed, Colonial Hypergrowth, Omega Core Everywhere, Landlordsector, Missions - Renewed, New Game Plus - Renewed, Achievements - Renewed, Extra System Reloaded - Oddisz Edition, Weapon Designer, The Everything Shop, Intel Renewed, StopBloatingMe and Cloning. A tip only shows when its mod is installed.
 
 Version 0.2.2 (2026-11-10)
 - New gold icon in mod managers (TriOS).
@@ -33,7 +33,7 @@ Version 0.2.1 (2026-11-10)
 - Added the forum topic link for Version Checker.
 
 Version 0.2.0 (2026-11-09)
-- Added a shared colony ledger that Omega Core Everywhere, Astral Ascension Renewed and Toolbox Economy Curves now use to keep, undo and clean up their colony changes before every save.
+- Added a shared colony ledger that Omega Core Everywhere, Colonial Hypergrowth and Toolbox Economy Curves now use to keep, undo and clean up their colony changes before every save.
 
 Version 0.1.0 (2026-11-09)
 - First version: a Manage button on the campaign bottom bar (shortcut Y) where Oddisz's mods keep their own pages, one tab per mod.
