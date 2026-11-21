@@ -13,7 +13,7 @@ Install it when one of my mods asks for it. On its own it adds nothing you will 
 [hr][center][size=12pt][b]Needed By[/b][/size][/center][hr]
 [list]
 [li][url=https://fractalsoftworks.com/forum/index.php?topic=36168]Omega Core Everywhere[/url] 1.2.3 and newer[/li]
-[li][url=https://fractalsoftworks.com/forum/index.php?topic=36167]Colonial Hypergrowth[/url] 1.0.2 and newer[/li]
+[li][url=https://fractalsoftworks.com/forum/index.php?topic=36497]Colonial Hypergrowth[/url] 1.0.2 and newer[/li]
 [li][url=https://fractalsoftworks.com/forum/index.php?topic=36178]Toolbox Economy Curves[/url] 1.0.3 and newer[/li]
 [li][url=https://github.com/andrzejsokolowski/starsector-landlordsector/releases/latest]Landlordsector[/url][/li]
 [/list]
